@@ -1,35 +1,34 @@
+# docker-compose.yml for Linux
+version: '3'
 services:
   gazebo:
     image: gazebo
-    platform: linux/amd64
     container_name: gazebo_sim
     environment:
-      - DISPLAY=host.docker.internal:0
-      - QT_X11_NO_MITSHM=1
-      - LIBGL_ALWAYS_SOFTWARE=1
+      - DISPLAY=${DISPLAY}  # Use host display directly
+      # No need for host.docker.internal or software rendering
     volumes:
       - ./models:/root/.gazebo/models
       - ./worlds:/worlds
-      - /tmp/.X11-unix:/tmp/.X11-unix
+      - /tmp/.X11-unix:/tmp/.X11-unix  # X11 socket
+      - ~/.Xauthority:/root/.Xauthority:ro  # X auth
     ports:
-      - "11345:11345"
+      - "11345:11345"  # Gazebo server port
     networks:
       - ros_net
-    command: gzserver --verbose /worlds/empty.world
+    command: gzserver /worlds/empty.world
   
   ros:
     image: osrf/ros:noetic-desktop
-    platform: linux/amd64
     container_name: ros_control
     environment:
-      - DISPLAY=host.docker.internal:0
-      - QT_X11_NO_MITSHM=1
-      - LIBGL_ALWAYS_SOFTWARE=1
+      - DISPLAY=${DISPLAY}  # Use host display directly
       - ROS_MASTER_URI=http://ros:11311
       - GAZEBO_MASTER_URI=http://gazebo:11345
     volumes:
       - ./catkin_ws:/catkin_ws
-      - /tmp/.X11-unix:/tmp/.X11-unix
+      - /tmp/.X11-unix:/tmp/.X11-unix  # X11 socket
+      - ~/.Xauthority:/root/.Xauthority:ro  # X auth
     networks:
       - ros_net
     working_dir: /catkin_ws
