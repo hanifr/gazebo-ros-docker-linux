@@ -20,6 +20,7 @@ This project provides a containerized ROS-Gazebo simulation environment, allowin
 - Linux Mint 20.3 (Una)
 
 ## Project Structure
+```
 gazebo-ros-docker-linux/
 ├── docker-compose.yml          # Docker configuration
 ├── models/                     # Custom Gazebo models
@@ -37,7 +38,7 @@ gazebo-ros-docker-linux/
     ├── record_data.sh          # Record simulation data
     ├── create_viz.sh           # Create web visualization
     └── full_test.sh            # Full environment setup
-
+```
 
 ## Setup Instructions
 Initial Setup
